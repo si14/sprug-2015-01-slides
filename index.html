@@ -143,11 +143,25 @@
      [:resources datomic]]
     (let [foobar (adapter body)
           uuid (:foobar/uuid foobar)
-          entity-url (mh/handler-var->url #'get-entity {:uuid uuid})]
+          entity-url (mh/handler-var-&gt;url #'get-entity {:uuid uuid})]
       (case (md/assert-entity datomic foobar oauth-token)
         ...
         :not-an-entity
         {:status 422 :body {:message "reference consistency violation"}})))</code></pre>
+        </section>
+
+        <section>
+          <h3>React + персистентность + hiccup</h3>
+          <pre><code data-trim class="clojure">(defn team [active? arrow-class score-class score]
+  (let [offset (str (- (* 93 (/ score (:max-score config))) 93) "%")
+        translation (str "translate3d(" offset ",0,0)")]
+    [:div.team {:class (when-not active? "inactive")}
+     [:div.arrow {:class arrow-class}
+     [:span.icon-arrow-right]]
+    [:div.score {:class score-class
+                 :style {:-webkit-transform translation
+                         :transform translation}}
+     [:span.label score]]]))</code></pre>
         </section>
 
         <section>
