@@ -134,6 +134,7 @@
   [[:request [:uri-args entry-id :- Long]]
    [:resources guestbook]]
   {:body (safe-get @guestbook entry-id)})</code></pre>
+          <p>NB: data &gt; fn &gt; macro</p>
         </section>
 
         <section>
@@ -164,6 +165,7 @@
         <section>
           <h3><a href="https://github.com/for-GET/http-decision-diagram">for-GET</a></h3>
           <img src="img/http_decision_crop.png">
+          <p>NB: controlflow DAG vs data DAG</p>
         </section>
 
         <section>
