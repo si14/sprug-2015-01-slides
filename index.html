@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+	<meta charset="utf-8">
+
+	<title>Clojure, Web и золото</title>
+
+	<meta name="description" content="Talk about Clojure in general">
+	<meta name="author" content="Dmitry Groshev">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<!--
+        <link rel="stylesheet" href="css/theme/default.css" id="theme"> -->
+	<link rel="stylesheet" href="css/theme/serif.css" id="theme">
+
+	<!-- For syntax highlighting -->
+	<!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
+	<link rel="stylesheet" href="lib/css/hemisu-light.css">
+
+	<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+	<script>
+	  document.write( '
+      <link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js">
+        </script>
+		<![endif]-->
+
+    <style>
+      img { border-width: 0px !important; }
+    </style>
+  </head>
+
+  <body>
+	<div class="reveal">
+	  <!-- Any section element inside of this container is displayed as a slide -->
+	  <div class="slides">
+		<section>
+		  <h1>Clojure, Web и золото</h1>
+		  <h3>Старатели против карьеров</h3>
+		  <p>
+			<small>Дмитрий Грошев (<a href="http://twitter.com/lambdadmitry">@lambdadmitry</a>)</small>
+		  </p>
+		</section>
+
+        <section>
+          <img src="img/wrap_rage.jpg">
+        </section>
+
+        <section>
+          <h3>Проприетарный софт</h3>
+        </section>
+
+        <section>
+          <img src="img/strip_mine.jpg">
+        </section>
+
+        <section>
+          <h3>Open Source</h3>
+        </section>
+
+        <section>
+          <img src="img/gold_miners.jpg">
+        </section>
+
+        <section>
+          <h3>Clojure</h3>
+        </section>
+
+        <section>
+          <img src="img/excavator.jpg">
+        </section>
+
+        <section>
+          <h2>Старые шахты</h2>
+        </section>
+
+        <section>
+          <img src="img/ror.png">
+        </section>
+
+        <section>
+          <img src="img/mvc.png">
+        </section>
+
+        <section>
+          <pre><code data-trim class="clojure large">(defroutes user-routes
+  (context "/user/:id{[0-9]+}" []
+    (GET "/" [] ...)
+    (GET "/profile" [] ...)
+    (GET "/posts" [] ...)))</code></pre>
+        </section>
+
+        <section>
+          <h2>Золото!</h2>
+        </section>
+
+        <section>
+          <h3><a href="https://github.com/weavejester/hiccup/">hiccup</a></h3>
+          <pre><code data-trim class="clojure large">(defn foobar [...]
+  [:div.top.container
+   [:a {:href "/"}
+       [:img {:src "/img/logo_small.png"
+              :border "0"}]]
+   [:div.links
+    (if is-authorized?
+      [:a {:href "/logout"} "Выйти"]
+      [:a {:href "/login"} "Войти в аккаунт"])]
+   [:div.clear]])</code></pre>
+        </section>
+
+        <section>
+          <h3><a href="https://github.com/Prismatic/plumbing/">Graph</a></h3>
+          <pre><code data-trim class="clojure large">(def stats-graph
+  {:n  (fnk [xs]   (count xs))
+   :m  (fnk [xs n] (/ (sum identity xs) n))
+   :m2 (fnk [xs n] (/ (sum #(* % %) xs) n))
+   :v  (fnk [m m2] (- m2 (* m m)))})</code></pre>
+        </section>
+
+        <section>
+          <h3><a href="https://github.com/Prismatic/fnhouse/">fnhouse</a></h3>
+          <pre><code data-trim class="clojure large">(defnk $entries$:entry-id$GET
+  "Get the entry at the given id"
+  {:responses {200 schemas/ClientEntry}}
+  [[:request [:uri-args entry-id :- Long]]
+   [:resources guestbook]]
+  {:body (safe-get @guestbook entry-id)})</code></pre>
+        </section>
+
+        <section>
+          <h3><a href="https://github.com/Prismatic/fnhouse/">fnhouse</a></h3>
+          <pre><code data-trim class="clojure">  (p/defnk post
+    "Adds new foobar"
+    {:responses  {201 s/Any
+                  422 {:message s/Str}}
+     :path       "/"
+     :method     :post
+     :auth-scope :auth-scopes/foobar-add}
+    [[:request datomic-val oauth-token
+      body :- (msext/fresh msext/Foobar)]
+     [:resources datomic]]
+    (let [foobar (adapter body)
+          uuid (:foobar/uuid foobar)
+          entity-url (mh/handler-var->url #'get-entity {:uuid uuid})]
+      (case (md/assert-entity datomic foobar oauth-token)
+        ...
+        :not-an-entity
+        {:status 422 :body {:message "reference consistency violation"}})))</code></pre>
+        </section>
+
+        <section>
+          <h2>Завтра?</h2>
+        </section>
+
+        <section>
+          <h3><a href="https://github.com/for-GET/http-decision-diagram">for-GET</a></h3>
+          <img src="img/http_decision_crop.png">
+        </section>
+
+        <section>
+          <h3><a href="http://remotestorage.io/">Remote storage</a></h3>
+          <img src="img/remote_storage.png">
+        </section>
+
+        <section>
+          <img src="img/decentr.png">
+        </section>
+
+        <section>
+          <h2>TODO:<br> копать много и глубоко</h2>
+        </section>
+
+        <section>
+          <h2>Вопросы?</h2>
+          <p>Слайды: <a href="http://si14.github.io/sprug-2015-01-slides">si14.github.io/sprug-2015-01-slides</a></p>
+          <p>Твиттер: <a href="https://twitter.com/lambdadmitry">@lambdadmitry</a></p>
+          <p>Почта: <a href="mailto:lambdadmitry@gmail.com">lambdadmitry@gmail.com</a></p>
+        </section>
+
+	  </div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.min.js"></script>
+
+	<script>
+
+	  // Full list of configuration options available here:
+	  // https://github.com/hakimel/reveal.js#configuration
+	  Reveal.initialize({
+	  controls: false,
+	  progress: true,
+	  history: true,
+	  center: true,
+
+	  theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+	  transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+	  // Optional libraries used to extend on reveal.js
+	  dependencies: [
+	  { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+	  { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+	  { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+	  { src: 'plugin/highlight/highlight.js', async: true, callback: function() {  hljs.initHighlightingOnLoad(); } },
+	  { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+	  { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+	  // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+	  // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+	  ]
+	  });
+
+	</script>
+
+  </body>
+</html>
